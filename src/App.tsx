@@ -199,12 +199,17 @@ function Login({ onLogin }) {
 
 // ─── LOGO SVG ─────────────────────────────────────────────────────────────────
 function EubioticsLogo({ size = 28 }) {
+  const scale = size / 28;
+  const w = 160 * scale;
+  const h = 40 * scale;
   return (
-    <svg width={size * 3.5} height={size * 0.85} viewBox="0 0 140 34" fill="none">
-      <text x="0" y="26" fontFamily="'Segoe UI', Arial, sans-serif" fontWeight="700" fontSize="26" fill="white">eub</text>
-      <text x="46" y="26" fontFamily="'Segoe UI', Arial, sans-serif" fontWeight="700" fontSize="26" fill="white">iotics</text>
-      <circle cx="44" cy="13" r="5" fill="#C5D92D"/>
-      <path d="M41 10 Q44 6 47 10" stroke="#C5D92D" strokeWidth="1.5" fill="none"/>
+    <svg width={w} height={h} viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* eubiotics text */}
+      <text x="0" y="34" fontFamily="'Arial Rounded MT Bold', 'Nunito', Arial, sans-serif" fontWeight="800" fontSize="34" fill="white" letterSpacing="-0.5">eubiotics</text>
+      {/* Hoja izquierda (verde oscuro) - sobre la i */}
+      <ellipse cx="100" cy="6" rx="3.5" ry="6" fill="#5A9E1A" transform="rotate(-25 100 6)"/>
+      {/* Hoja derecha (verde lima) - sobre la i */}
+      <ellipse cx="107" cy="4" rx="3" ry="5.5" fill="#C5D92D" transform="rotate(20 107 4)"/>
     </svg>
   );
 }
