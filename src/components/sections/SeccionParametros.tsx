@@ -1,5 +1,7 @@
 import { fmtInt } from '../../utils';
 
+export type ObjetivoTipo = 'kgProd' | 'ave' | 'tonAlim';
+
 interface Props {
   totalAves: number;
   pesoVivo: number;
@@ -13,6 +15,10 @@ interface Props {
   emKcalLX350: number;
   emKcalLXM: number;
   puedeMetodoA: boolean;
+  objetivoTipo: ObjetivoTipo;
+  objetivoValor: number | null;
+  onObjetivoTipo: (v: ObjetivoTipo) => void;
+  onObjetivoValor: (v: number | null) => void;
   onTotalAves: (v: number) => void;
   onPesoVivo: (v: number) => void;
   onFcr: (v: number) => void;
@@ -25,16 +31,23 @@ interface Props {
   onEmKcalLX350: (v: number) => void;
 }
 
+const OBJETIVO_OPCIONES: { key: ObjetivoTipo; label: string; hint: string; step: number }[] = [
+  { key: 'kgProd',  label: '$/kg producido',       hint: 'ej. 11.00', step: 0.01 },
+  { key: 'ave',     label: 'Ahorro $/ave',          hint: 'ej. 0.50',  step: 0.01 },
+  { key: 'tonAlim', label: 'Ahorro $/ton alimento', hint: 'ej. 80',    step: 1    },
+];
+
 export default function SeccionParametros(p: Props) {
   const inputStyle: React.CSSProperties = { width: '100%', padding: '10px 12px', border: '1.5px solid #e0e0e0', borderRadius: 7, fontSize: 14, color: '#1B2B6B', fontWeight: 600, outline: 'none', boxSizing: 'border-box', background: '#fafafa' };
   const labelStyle: React.CSSProperties = { fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: 0.5, fontWeight: 600, display: 'block', marginBottom: 5 };
   const gridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, marginBottom: 16 };
   const hintStyle: React.CSSProperties = { fontSize: 10, color: '#aaa', marginTop: 4 };
+  const objOpc = OBJETIVO_OPCIONES.find(o => o.key === p.objetivoTipo)!;
 
   return (
     <div style={{ background: '#fff', borderRadius: 10, padding: '24px 28px', marginBottom: 16, border: '1px solid #eee', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
       <div style={{ fontSize: 15, fontWeight: 700, color: '#1B2B6B', marginBottom: 4 }}>Parámetros productivos</div>
-      <div style={{ fontSize: 11, color: '#aaa', marginBottom: 20 }}>Aves, peso, FCR, precios</div>
+      <div style={{ fontSize: 11, color: '#aaa', marginBottom: 20 }}>Aves, peso, CA, precios</div>
 
       <div style={gridStyle}>
         <div>
@@ -104,6 +117,52 @@ export default function SeccionParametros(p: Props) {
           </div>
         </>
       )}
+
+      {/* ── Objetivo de beneficio ── */}
+      <div style={{ borderTop: '1px solid #eee', marginTop: 8, paddingTop: 18 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: '#1B2B6B', marginBottom: 4 }}>Objetivo de beneficio</div>
+        <div style={{ fontSize: 11, color: '#aaa', marginBottom: 14 }}>
+          Define una meta — los escenarios mostrarán ✓ o ✗ según si la alcanzan
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 20, alignItems: 'start', maxWidth: 480 }}>
+          <div>
+            <label style={labelStyle}>Tipo de objetivo</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {OBJETIVO_OPCIONES.map(o => (
+                <label key={o.key} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                  <input
+                    type="radio"
+                    name="objetivoTipo"
+                    checked={p.objetivoTipo === o.key}
+                    onChange={() => p.onObjetivoTipo(o.key)}
+                    style={{ accentColor: '#1B2B6B', width: 14, height: 14 }}
+                  />
+                  <span style={{ fontSize: 12, color: '#444', fontWeight: p.objetivoTipo === o.key ? 700 : 400 }}>
+                    {o.label}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label style={labelStyle}>Meta ({objOpc.label})</label>
+            <input
+              type="number"
+              placeholder={objOpc.hint}
+              value={p.objetivoValor ?? ''}
+              step={objOpc.step}
+              onChange={e => p.onObjetivoValor(e.target.value === '' ? null : parseFloat(e.target.value))}
+              style={{ ...inputStyle, borderColor: '#1B2B6B40' }}
+            />
+            <div style={hintStyle}>
+              {p.objetivoTipo === 'kgProd'  && '✓ si $/kg producido es menor a este valor'}
+              {p.objetivoTipo === 'ave'      && '✓ si el ahorro por ave supera este valor'}
+              {p.objetivoTipo === 'tonAlim'  && '✓ si el ahorro por ton de alimento supera este valor'}
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

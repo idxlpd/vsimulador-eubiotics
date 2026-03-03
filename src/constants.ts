@@ -14,7 +14,7 @@ export const FUENTES_GRASA: Record<string, FuenteGrasaData> = {
 };
 
 export const ESPECIES: Record<string, EspecieData> = {
-  pollo: { label: 'Pollo de Engorda', grasamMin: 2.0, puedeRecuperarEM: true, pesoDefault: 2.5, consumoDefault: 4.5, fcrDefault: 1.30, avesDefault: 100000 },
+  pollo: { label: 'Pollo de Engorda', grasamMin: 2.0, puedeRecuperarEM: true, pesoDefault: 3.1, consumoDefault: 4.5, fcrDefault: 1.50, avesDefault: 100000 },
   gallina: { label: 'Gallina',          grasamMin: 1.0,  puedeRecuperarEM: false, pesoDefault: 1.8,  consumoDefault: 45,   fcrDefault: 2.10, avesDefault: 50000  },
   cerdo:   { label: 'Cerdo',            grasamMin: 0.5,  puedeRecuperarEM: false, pesoDefault: 110,  consumoDefault: 280,  fcrDefault: 2.50, avesDefault: 5000   },
 };
