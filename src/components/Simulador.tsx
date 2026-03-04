@@ -120,6 +120,8 @@ export default function Simulador({ user, onLogout }: { user: User; onLogout: ()
           onPrecioLipotex250={setPrecioLipotex250} onPrecioLipotex350={setPrecioLipotex350}
           onPrecioLipotexM={setPrecioLipotexM}
           onEmKcalLX250={setEmKcalLX250} onEmKcalLX350={setEmKcalLX350}
+          objetivoTipo={objetivoTipo} objetivoValor={objetivoValor}
+          onObjetivoTipo={setObjetivoTipo} onObjetivoValor={setObjetivoValor}
         />
 
         <SeccionEscenarios
