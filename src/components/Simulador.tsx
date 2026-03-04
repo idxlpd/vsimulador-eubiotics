@@ -4,7 +4,6 @@ import SeccionEspecieMercado from './sections/SeccionEspecieMercado';
 import SeccionFuenteGrasa from './sections/SeccionFuenteGrasa';
 import SeccionProgramaDosis from './sections/SeccionProgramaDosis';
 import SeccionParametros from './sections/SeccionParametros';
-import type { ObjetivoTipo } from './sections/SeccionParametros';
 import SeccionEscenarios from './sections/SeccionEscenarios';
 import { ESPECIES, FUENTES_GRASA } from '../constants';
 import { calcularEscenarios } from '../engine';
@@ -29,10 +28,10 @@ export default function Simulador({ user, onLogout }: { user: User; onLogout: ()
   const [dosisLXM, setDosisLXM] = useState<DosisSet>({ inicio: 350, crecimiento: 350, finalizacion: 350 });
 
   // Precios
-  const [precioEstandar, setPrecioEstandar] = useState(111.61);
-  const [precioLipotex250, setPrecioLipotex250] = useState(111.61);
-  const [precioLipotex350, setPrecioLipotex350] = useState(111.61);
-  const [precioLipotexM, setPrecioLipotexM] = useState(120.19);
+  const [precioEstandar, setPrecioEstandar] = useState(6.50);
+  const [precioLipotex250, setPrecioLipotex250] = useState(6.50);
+  const [precioLipotex350, setPrecioLipotex350] = useState(6.50);
+  const [precioLipotexM, setPrecioLipotexM] = useState(7.00);
 
   // Parametros productivos
   const [totalAves, setTotalAves] = useState(100000);
@@ -43,10 +42,6 @@ export default function Simulador({ user, onLogout }: { user: User; onLogout: ()
   // Kcal liberadas (editables solo para LX250 y LX350)
   const [emKcalLX250, setEmKcalLX250] = useState(35);
   const [emKcalLX350, setEmKcalLX350] = useState(35);
-
-  // Objetivo de beneficio
-  const [objetivoTipo, setObjetivoTipo] = useState<ObjetivoTipo>('kgProd');
-  const [objetivoValor, setObjetivoValor] = useState<number | null>(null);
 
   // Actualizar defaults al cambiar especie
   useEffect(() => {
@@ -116,8 +111,6 @@ export default function Simulador({ user, onLogout }: { user: User; onLogout: ()
           precioLipotex350={precioLipotex350} precioLipotexM={precioLipotexM}
           emKcalLX250={emKcalLX250} emKcalLX350={emKcalLX350} emKcalLXM={emKcalLXM}
           puedeMetodoA={resultado.puedeMetodoA}
-          objetivoTipo={objetivoTipo} objetivoValor={objetivoValor}
-          onObjetivoTipo={setObjetivoTipo} onObjetivoValor={setObjetivoValor}
           onTotalAves={setTotalAves} onPesoVivo={setPesoVivo} onFcr={setFcr}
           onPrecioAlimento={setPrecioAlimento} onPrecioEstandar={setPrecioEstandar}
           onPrecioLipotex250={setPrecioLipotex250} onPrecioLipotex350={setPrecioLipotex350}
@@ -126,17 +119,12 @@ export default function Simulador({ user, onLogout }: { user: User; onLogout: ()
         />
 
         <SeccionEscenarios
-          global={{
-            especie, totalAves, pesoVivo, fcr, precioAlimento,
-            puedeMetodoA: resultado.puedeMetodoA,
-          }}
-          defaults={{
-            fuenteGrasa, grasa_pct, precioGrasa,
-            precioEstandar, precioLipotex250, precioLipotex350, precioLipotexM,
-            dosisLX250, dosisLX350, dosisLXM,
-          }}
-          objetivoTipo={objetivoTipo}
-          objetivoValor={objetivoValor}
+          especie={especie} totalAves={totalAves}
+          base={resultado.base}
+          estandar={resultado.estandar}
+          lipotex250={resultado.lipotex250}
+          lipotex350={resultado.lipotex350}
+          lipotexM={resultado.lipotexM}
         />
 
         <div style={{ textAlign: 'center', fontSize: 11, color: '#bbb', marginTop: 16 }}>
