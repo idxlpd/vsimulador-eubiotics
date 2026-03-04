@@ -4,6 +4,7 @@ import SeccionEspecieMercado from './sections/SeccionEspecieMercado';
 import SeccionFuenteGrasa from './sections/SeccionFuenteGrasa';
 import SeccionProgramaDosis from './sections/SeccionProgramaDosis';
 import SeccionParametros from './sections/SeccionParametros';
+import type { ObjetivoTipo } from './sections/SeccionParametros';
 import SeccionEscenarios from './sections/SeccionEscenarios';
 import { ESPECIES, FUENTES_GRASA } from '../constants';
 import { calcularEscenarios } from '../engine';
@@ -119,12 +120,17 @@ export default function Simulador({ user, onLogout }: { user: User; onLogout: ()
         />
 
         <SeccionEscenarios
-          especie={especie} totalAves={totalAves}
-          base={resultado.base}
-          estandar={resultado.estandar}
-          lipotex250={resultado.lipotex250}
-          lipotex350={resultado.lipotex350}
-          lipotexM={resultado.lipotexM}
+          global={{
+            especie, totalAves, pesoVivo, fcr, precioAlimento,
+            puedeMetodoA: resultado.puedeMetodoA,
+          }}
+          defaults={{
+            fuenteGrasa, grasa_pct, precioGrasa,
+            precioEstandar, precioLipotex250, precioLipotex350, precioLipotexM,
+            dosisLX250, dosisLX350, dosisLXM,
+          }}
+          objetivoTipo={objetivoTipo}
+          objetivoValor={objetivoValor}
         />
 
         <div style={{ textAlign: 'center', fontSize: 11, color: '#bbb', marginTop: 16 }}>
