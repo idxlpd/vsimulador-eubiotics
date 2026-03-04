@@ -72,6 +72,9 @@ export default function Simulador({ user, onLogout }: { user: User; onLogout: ()
   const kcal350 = objetivo === 'kcal' ? emKcalLX350 : 0;
   const kcalM   = objetivo === 'kcal' ? emKcalLXM   : 0;
 
+  const [objetivoTipo, setObjetivoTipo] = useState<ObjetivoTipo>('kgProd');
+  const [objetivoValor, setObjetivoValor] = useState<number | null>(null);
+
   // Motor de calculo
   const resultado = calcularEscenarios({
     especie, fuenteGrasa, grasa_pct,
