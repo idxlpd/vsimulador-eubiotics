@@ -85,9 +85,40 @@ export default function Simulador({ user, onLogout }: { user: User; onLogout: ()
     precioLipotexM,   dosisLXM,   emKcalLXM:   kcalM,
   });
 
+
+  // Export CSV
+  const handleExportCSV = () => {
+    const r = resultado;
+    const esp = ESPECIES[especie];
+    const rows = [
+      ['Parametro', 'Valor'],
+      ['Especie', esp.label],
+      ['Total Aves', totalAves],
+      ['Peso Vivo (kg)', pesoVivo],
+      ['CA', fcr],
+      ['Precio Alimento (MXN/ton)', precioAlimento],
+      [''],
+      ['Programa', '$/kg Alim', '$/Ave', '$/kg Prod', 'Ahorro/Ave', 'Ahorro Total'],
+      ['Base', r.base.costoKgAlim.toFixed(4), r.base.costoAve.toFixed(2), r.base.costoKgProd.toFixed(4), '-', '-'],
+      ['EP', r.estandar.costoKgAlim.toFixed(4), r.estandar.costoAve.toFixed(2), r.estandar.costoKgProd.toFixed(4), r.estandar.ahorro_ave.toFixed(2), r.estandar.ahorro_total.toFixed(0)],
+      ['Lipotex Plus', r.lipotex250.costoKgAlim.toFixed(4), r.lipotex250.costoAve.toFixed(2), r.lipotex250.costoKgProd.toFixed(4), r.lipotex250.ahorro_ave.toFixed(2), r.lipotex250.ahorro_total.toFixed(0)],
+      ['Lipotex Plus 350', r.lipotex350.costoKgAlim.toFixed(4), r.lipotex350.costoAve.toFixed(2), r.lipotex350.costoKgProd.toFixed(4), r.lipotex350.ahorro_ave.toFixed(2), r.lipotex350.ahorro_total.toFixed(0)],
+      ['Lipotex Plus M', r.lipotexM.costoKgAlim.toFixed(4), r.lipotexM.costoAve.toFixed(2), r.lipotexM.costoKgProd.toFixed(4), r.lipotexM.ahorro_ave.toFixed(2), r.lipotexM.ahorro_total.toFixed(0)],
+    ];
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'simulador-eubiotics.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Export PDF (print)
+  const handleExportPDF = () => { window.print(); };
+
   return (
     <div style={{ minHeight: '100vh', background: '#f4f6fb', fontFamily: "'Segoe UI', sans-serif" }}>
-      <Header user={user} onLogout={onLogout} />
+      <Header user={user} onLogout={onLogout} onExportPDF={handleExportPDF} onExportCSV={handleExportCSV} />
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '24px 16px 60px' }}>
 
         <SeccionEspecieMercado
